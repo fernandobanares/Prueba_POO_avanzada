@@ -3,8 +3,8 @@ from error import SubTipoInvalidoException
 
 class Anuncio(ABC):
     def __init__(self, ancho: int, alto: int, url_archivo: str, url_clic: str, sub_tipo: str) -> None:
-        self._ancho = ancho
-        self._alto = alto
+        self._ancho = ancho if ancho > 0 else 1
+        self._alto = alto if alto > 0 else 1
         self._url_archivo = url_archivo
         self._url_clic = url_clic
         self._sub_tipo = sub_tipo
@@ -49,7 +49,7 @@ class Anuncio(ABC):
     
     @sub_tipo.setter
     def sub_tipo(self, sub_tipo: str):
-        if self._sub_tipo in self.SUB_TIPOS:
+        if sub_tipo in self.SUB_TIPOS:
             self._sub_tipo = sub_tipo
         else:
             raise SubTipoInvalidoException(f"El subtipo {sub_tipo} no es válido para {self.__class__.__name__}.")
@@ -59,10 +59,10 @@ class Anuncio(ABC):
         for subtipo in Anuncio.SUB_TIPOS:
             print(f"- {subtipo}")
     @abstractmethod
-    def comprimir_anuncio():
+    def comprimir_anuncio() -> None:
         pass
     @abstractmethod
-    def redimensionar_anuncio():
+    def redimensionar_anuncio() -> None:
         pass
 
 class Video(Anuncio):
@@ -71,14 +71,20 @@ class Video(Anuncio):
     
     def __init__(self, url_archivo: str, url_clic: str, sub_tipo: str, duracion: int) -> None:
         super().__init__(ancho=1, alto=1, url_archivo=url_archivo, url_clic=url_clic, sub_tipo=sub_tipo)
-        self._duracion = duracion
+        self._duracion = duracion if duracion > 0 else 5
     @property
     def ancho(self) -> int:
         return 1
+    @ancho.setter
+    def ancho(self, ancho: int) -> None:
+        pass
 
     @property
     def alto(self) -> int:
-        return 1  
+        return 1
+    @alto.setter
+    def alto(self, alto: int) -> None:
+        pass 
       
     @property
     def duracion(self):
